@@ -61,17 +61,34 @@
                 url: '/mars',
                 data: {},
                 success: function (response) {
-                    alert(response['msg'])
+                   let rows = response['orders']
+                   for(let i = 0; i < rows.length; i++){
+                       let name = rows[i]['name']
+                       let address = rows[i]['address']
+                       let size = rows[i]['size']
+
+                       let temp_html = `<tr>
+                                            <td>${name}</td>
+                                            <td>${address}</td>
+                                            <td>${size}</td>
+                                          </tr>`
+                       $('#order_box').append(temp_html)
+                   }
                 }
             });
         }
         function save_order() {
+            let name = $('#name').val()
+            let address = $('#address').val()
+            let size = $('#size').val()
+
             $.ajax({
                 type: 'POST',
                 url: '/mars',
-                data: { sample_give:'데이터전송' },
+                data: { name_give: name, address_give: address, size_give: size},
                 success: function (response) {
                     alert(response['msg'])
+                    window.location.reload()
                 }
             });
         }
@@ -116,22 +133,8 @@
                 <th scope="col">평수</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>홍길동</td>
-                <td>서울시 용산구</td>
-                <td>20평</td>
-              </tr>
-              <tr>
-                <td>임꺽정</td>
-                <td>부산시 동구</td>
-                <td>10평</td>
-              </tr>
-              <tr>
-                <td>세종대왕</td>
-                <td>세종시 대왕구</td>
-                <td>30평</td>
-              </tr>
+            <tbody id = "order_box">
+            
             </tbody>
           </table>
     </div>
